@@ -1,0 +1,31 @@
+package com.unitbv.school_management_system.entities;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "courses")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Course {
+
+    @Id
+    @GeneratedValue
+    private Integer courseId;
+
+    @Column(nullable = false)
+    private String courseName;
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private Teacher teacher;
+
+    @Column(nullable = false, updatable = false)
+    private java.sql.Timestamp createdAt;
+
+    private java.sql.Timestamp updatedAt;
+}
+
