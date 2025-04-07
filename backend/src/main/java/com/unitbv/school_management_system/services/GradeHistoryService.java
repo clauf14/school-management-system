@@ -32,7 +32,7 @@ public class GradeHistoryService {
     public GradeHistory updateGradeHistory(Integer gradeHistoryId, GradeHistory gradeHistory) {
         GradeHistory gradeHistoryToUpdate = gradeHistoryRepository.findById(gradeHistoryId).orElseThrow(() -> new IllegalStateException(String.format("GradeHistory with ID %s doesn't exist", gradeHistoryId)));
 
-        gradeHistoryToUpdate.setGrade(gradeHistory.getGrade());
+        gradeHistoryToUpdate.setGradeId(gradeHistory.getGradeId());
         gradeHistoryToUpdate.setOldScore(gradeHistory.getOldScore());
         gradeHistoryToUpdate.setNewScore(gradeHistory.getNewScore());
         gradeHistoryToUpdate.setChangedBy(gradeHistory.getChangedBy());

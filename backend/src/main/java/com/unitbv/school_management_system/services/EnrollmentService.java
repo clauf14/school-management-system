@@ -31,8 +31,8 @@ public class EnrollmentService {
     public Enrollment updateEnrollment(Integer enrollmentId, Enrollment enrollment) {
         Enrollment enrollmentToUpdate = enrollmentRepository.findById(enrollmentId).orElseThrow(() -> new IllegalStateException(String.format("Enrollment with ID %s doesn't exist", enrollmentId)));
 
-        enrollmentToUpdate.setStudent(enrollment.getStudent());
-        enrollmentToUpdate.setCourse(enrollment.getCourse());
+        enrollmentToUpdate.setStudentId(enrollment.getStudentId());
+        enrollmentToUpdate.setCourseId(enrollment.getCourseId());
         enrollmentToUpdate.setUpdatedAt(enrollment.getUpdatedAt());
 
 

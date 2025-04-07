@@ -30,7 +30,7 @@ public class TeacherService {
     public Teacher updateTeacher(Integer teacherId, Teacher teacher) {
         Teacher teacherToUpdate = teacherRepository.findById(teacherId).orElseThrow(() -> new IllegalStateException(String.format("Teacher with ID %s doesn't exist", teacherId)));
 
-        teacherToUpdate.setUser(teacher.getUser());
+        teacherToUpdate.setUserId(teacher.getUserId());
         teacherToUpdate.setFirstName(teacher.getFirstName());
         teacherToUpdate.setLastName(teacher.getLastName());
         teacherToUpdate.setUpdatedAt(teacher.getUpdatedAt());

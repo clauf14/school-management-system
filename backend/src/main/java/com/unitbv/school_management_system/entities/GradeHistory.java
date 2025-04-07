@@ -16,9 +16,8 @@ public class GradeHistory {
     @GeneratedValue
     private Integer historyId;
 
-    @ManyToOne
-    @JoinColumn(name = "grade_id", nullable = false)
-    private Grade grade;
+    @Column(name = "grade_id", nullable = false)
+    private Integer gradeId;
 
     @Column(nullable = false)
     private Double oldScore;
@@ -26,9 +25,8 @@ public class GradeHistory {
     @Column(nullable = false)
     private Double newScore;
 
-    @ManyToOne
-    @JoinColumn(name = "changed_by", nullable = false)
-    private User changedBy;
+    @Column(name = "changed_by", nullable = false)
+    private Integer changedBy;
 
     @Column(nullable = false)
     private java.sql.Timestamp changedAt;

@@ -16,9 +16,8 @@ public class Student {
     @GeneratedValue
     private Integer studentId;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", unique = true, nullable = false)
-    private User user;
+    @Column(name = "user_id", nullable = false, unique = true)
+    private Integer userId;
 
     @Column(nullable = false)
     private String firstName;

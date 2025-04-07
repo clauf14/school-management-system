@@ -31,7 +31,7 @@ public class AssignmentService {
         Assignment assignmentToUpdate = assignmentRepository.findById(assignmentId).orElseThrow(() -> new IllegalStateException(String.format("Assignment with ID %s doesn't exist", assignmentId)));
 
         assignmentToUpdate.setAssignmentName(assignment.getAssignmentName());
-        assignmentToUpdate.setCourse(assignment.getCourse());
+        assignmentToUpdate.setCourseId(assignment.getCourseId());
         assignmentToUpdate.setUpdatedAt(assignment.getUpdatedAt());
         assignmentToUpdate.setMaxScore(assignment.getMaxScore());
 

@@ -16,13 +16,11 @@ public class Grade {
     @GeneratedValue
     private Integer gradeId;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
-    private Student student;
+    @Column(name = "student_id", nullable = false)
+    private Integer studentId;
 
-    @ManyToOne
-    @JoinColumn(name = "assignment_id", nullable = false)
-    private Assignment assignment;
+    @Column(name = "assignment_id", nullable = false)
+    private Integer assignmentId;
 
     @Column(nullable = false)
     private Double score;
