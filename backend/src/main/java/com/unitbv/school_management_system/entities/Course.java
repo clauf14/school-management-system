@@ -19,9 +19,8 @@ public class Course {
     @Column(nullable = false)
     private String courseName;
 
-    @ManyToOne
-    @JoinColumn(name = "teacher_id", nullable = false)
-    private Teacher teacher;
+    @Column(name = "teacher_id", nullable = false)
+    private Integer teacherId;
 
     @Column(nullable = false, updatable = false)
     private java.sql.Timestamp createdAt;

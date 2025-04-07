@@ -32,7 +32,7 @@ public class CourseService {
         Course courseToUpdate = courseRepository.findById(courseId).orElseThrow(() -> new IllegalStateException(String.format("Course with ID %s doesn't exist", courseId)));
 
         courseToUpdate.setCourseName(course.getCourseName());
-        courseToUpdate.setTeacher(course.getTeacher());
+        courseToUpdate.setTeacherId(course.getTeacherId());
         courseToUpdate.setUpdatedAt(course.getUpdatedAt());
 
 

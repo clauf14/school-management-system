@@ -16,15 +16,14 @@ public class Assignment {
     @GeneratedValue
     private Integer assignmentId;
 
-    @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
-    private Course course;
+    @Column(name = "course_id", nullable = false)
+    private Integer courseId;
 
     @Column(nullable = false)
     private String assignmentName;
 
     @Column(nullable = false)
-    private int maxScore;
+    private double maxScore;
 
     @Column(nullable = false, updatable = false)
     private java.sql.Timestamp createdAt;

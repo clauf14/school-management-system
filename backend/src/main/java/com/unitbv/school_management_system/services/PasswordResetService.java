@@ -30,7 +30,7 @@ public class PasswordResetService {
     public PasswordReset updatePasswordReset(Integer resetId, PasswordReset passwordReset) {
         PasswordReset passwordResetToUpdate = passwordResetRepository.findById(resetId).orElseThrow(() -> new IllegalStateException(String.format("Password reset with ID %s doesn't exist", resetId)));
 
-        passwordResetToUpdate.setUser(passwordReset.getUser());
+        passwordResetToUpdate.setUserId(passwordReset.getUserId());
         passwordResetToUpdate.setResetToken(passwordReset.getResetToken());
         passwordResetToUpdate.setExpiresAt(passwordReset.getExpiresAt());
 
