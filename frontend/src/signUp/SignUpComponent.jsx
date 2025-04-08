@@ -14,13 +14,23 @@ const SignUpComponent = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    /*
     useEffect(() => {
         userRef.current.focus();
     }, [])
 
+     */
+
     const handleSignUp = async (e) => {
         e.preventDefault();
         try{
+            if (!username || !email || !password || !confirmPassword) {
+                alert("Please complete all fields");
+                return;
+            }
+            if (!validateEmail(email)) {
+                alert("Please enter valid email");
+            }
             if (password !== confirmPassword) {
                 alert("Passwords don't match");
                 return;
@@ -36,6 +46,14 @@ const SignUpComponent = () => {
         }
     };
 
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
+
     return (
         <div className="login-container">
             <h3>Sign up</h3>
@@ -44,19 +62,15 @@ const SignUpComponent = () => {
                 <input
                     type="text"
                     name="username"
-                    ref={userRef}
                     placeholder="Username"
-                    autoComplete="off"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                 />
                 <label>Email</label>
                 <input
-                    type="text"
+                    type="email"
                     name="email"
-                    ref={userRef}
                     placeholder="Enter your email"
-                    autoComplete="off"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
