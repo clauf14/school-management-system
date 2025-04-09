@@ -2,12 +2,14 @@ package com.unitbv.school_management_system.controllers;
 
 import com.unitbv.school_management_system.entities.Course;
 import com.unitbv.school_management_system.services.CourseService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/course")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CourseController {
 
     private final CourseService courseService;
@@ -29,6 +31,11 @@ public class CourseController {
     @GetMapping
     public List<Course> getCourses() {
         return courseService.getAllCourses();
+    }
+
+    @GetMapping("/all/{teacherId}")
+    public List<Course> getTeacherCourses(@PathVariable Integer teacherId) {
+        return courseService.getTeacherCourses(teacherId);
     }
 
     @PutMapping("/{courseId}")
