@@ -45,4 +45,8 @@ public class CourseService {
         }
         courseRepository.deleteById(courseId);
     }
+
+    public List<Course> getTeacherCourses(Integer teacherId) {
+        return courseRepository.getAllByTeacherId(teacherId);
+    }
 }

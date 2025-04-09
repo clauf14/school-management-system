@@ -23,7 +23,7 @@ const SignUpComponent = () => {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        try{
+        try {
             if (!username || !email || !password || !confirmPassword) {
                 alert("Please complete all fields");
                 return;
@@ -41,7 +41,7 @@ const SignUpComponent = () => {
             } else {
                 console.log(response.data);
             }
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
     };
@@ -55,49 +55,51 @@ const SignUpComponent = () => {
     };
 
     return (
-        <div className="login-container">
-            <h3>Sign up</h3>
-            <form>
-                <label>Username</label>
-                <input
-                    type="text"
-                    name="username"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <label>Email</label>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <label>Password</label>
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Enter your password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                />
-                <label>Confirm password</label>
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Confirm your password"
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    value={confirmPassword}
-                />
-                <button type="submit" onClick={handleSignUp}>Sign up</button>
-            </form>
-            <p>
-                Already have an account?<br />
-                <span className="line">
-                    <Link to="/login">Log in</Link>
-                </span>
-            </p>
+        <div className="register-page">
+            <div className="login-container">
+                <h3>Sign up</h3>
+                <form>
+                    <label>Username</label>
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <label>Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        value={password}
+                    />
+                    <label>Confirm password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Confirm your password"
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        value={confirmPassword}
+                    />
+                    <button type="submit" onClick={handleSignUp}>Sign up</button>
+                </form>
+                <p>
+                    Already have an account?<br />
+                    <span className="line">
+                        <Link to="/login">Log in</Link>
+                    </span>
+                </p>
+            </div>
         </div>
     );
 }
