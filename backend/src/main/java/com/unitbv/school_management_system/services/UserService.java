@@ -86,6 +86,6 @@ public class UserService {
         user.setPasswordHash(passwordEncoder.encode(CharBuffer.wrap(userDto.getPassword())));
 
         User savedUser = userRepository.save(user);
-        return user;
+        return savedUser;
     }
 }

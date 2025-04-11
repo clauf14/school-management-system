@@ -7,7 +7,10 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    //se ignora campul parola pentru ca nu are acelasi format, in db e string si in mapper e char[]
+    //se ignora campul password pentru ca nu are acelasi format, in db e string si in mapper e char[]
     @Mapping(target = "passwordHash", ignore = true)
+    @Mapping(source = "role", target = "role")
+    @Mapping(source = "createdAt", target = "createdAt")
+    @Mapping(source = "token", target = "token")
     User signUpToUser(SignUpDto userDto);
 }
