@@ -25,6 +25,9 @@ public class User {
     @Column(nullable = false)
     private String passwordHash;
 
+    @Column(nullable = false)
+    private String token;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
