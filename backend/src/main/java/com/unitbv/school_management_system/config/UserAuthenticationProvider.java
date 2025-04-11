@@ -38,10 +38,10 @@ public class UserAuthenticationProvider {
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()
-                .withSubject(user.getUsername())
+                .withSubject(user.getEmail())
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
-                .withClaim("email", user.getEmail())
+                .withClaim("email", user.getUsername())
                 .withClaim("id", user.getUserId())
                 .sign(algorithm);
     }
