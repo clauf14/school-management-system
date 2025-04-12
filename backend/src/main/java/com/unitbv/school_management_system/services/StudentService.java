@@ -27,6 +27,10 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
+    public List<Student> getAllStudentsByCourseAndTeacher(Integer courseId, Integer teacherId) {
+        return studentRepository.getStudentsByCourseIdAndTeacherId(courseId, teacherId);
+    }
+
     public Student updateStudent(Integer studentId, Student student) {
         Student studentToUpdate = studentRepository.findById(studentId).orElseThrow(() -> new IllegalStateException(String.format("Student with ID %s doesn't exist", studentId)));
 

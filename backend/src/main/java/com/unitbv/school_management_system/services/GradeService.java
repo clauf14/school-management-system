@@ -19,6 +19,10 @@ public class GradeService {
         return gradeRepository.save(grade);
     }
 
+    public Grade addGradeByCourseAndStudent(Integer courseId, Integer studentId, Grade grade) {
+        return gradeRepository.addGradeByCourseIdAndStudentId(courseId, studentId, grade);
+    }
+
     public Grade getGrade(Integer gradeId) {
         return gradeRepository.findById(gradeId).orElseThrow(() -> new IllegalArgumentException(String.format("Grade with ID %s doesn't exist", gradeId)));
     }
@@ -31,6 +35,23 @@ public class GradeService {
         Grade gradeToUpdate = gradeRepository.findById(gradeId).orElseThrow(() -> new IllegalStateException(String.format("Grade with ID %s doesn't exist", gradeId)));
 
         gradeToUpdate.setStudentId(grade.getStudentId());
+        gradeToUpdate.setCourseId(grade.getCourseId());
+        gradeToUpdate.setAssignmentId(grade.getAssignmentId());
+        gradeToUpdate.setScore(grade.getScore());
+        gradeToUpdate.setGradedAt(grade.getGradedAt());
+        gradeToUpdate.setUpdatedAt(grade.getUpdatedAt());
+
+
+        return gradeRepository.save(gradeToUpdate);
+    }
+
+    public Grade updateGradeByCourseAndStudent(Integer gradeId, Integer courseId, Integer studentId, Grade grade) {
+        Grade gradeToUpdate = gradeRepository.findById(gradeId).orElseThrow(() -> new IllegalStateException(String.format("Grade with ID %s doesn't exist", gradeId)));
+
+
+        gradeToUpdate.setCourseId(courseId);
+        gradeToUpdate.setStudentId(studentId);
+        gradeToUpdate.setCourseId(grade.getCourseId());
         gradeToUpdate.setAssignmentId(grade.getAssignmentId());
         gradeToUpdate.setScore(grade.getScore());
         gradeToUpdate.setGradedAt(grade.getGradedAt());
@@ -46,4 +67,8 @@ public class GradeService {
         }
         gradeRepository.deleteById(gradeId);
     }
+    public List<Grade> getGradesByCourseAndStudent(Integer courseId, Integer studentId) {
+        return gradeRepository.getGradesByCourseIdAndStudentId(courseId, studentId);
+    }
+
 }

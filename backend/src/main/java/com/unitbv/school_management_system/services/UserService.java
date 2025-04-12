@@ -4,7 +4,7 @@ import com.unitbv.school_management_system.authdtos.CredentialsDto;
 import com.unitbv.school_management_system.authdtos.SignUpDto;
 import com.unitbv.school_management_system.entities.User;
 import com.unitbv.school_management_system.exceptions.AppException;
-import com.unitbv.school_management_system.mappers.UserMapper;
+//import com.unitbv.school_management_system.mappers.UserMapper;
 import com.unitbv.school_management_system.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserMapper userMapper;
+//    private final UserMapper userMapper;
 
     public User findByUsername(String login) {
         User user = userRepository.findByEmail(login)
@@ -74,18 +74,18 @@ public class UserService {
         throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
 
-    public User register(SignUpDto userDto) {
-        Optional<User> optionalUser = userRepository.findByEmail(userDto.getUsername());
-
-        if (optionalUser.isPresent()) {
-            throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
-        }
-
-        User user = userMapper.signUpToUser(userDto);
-        System.out.println(user.toString());
-        user.setPasswordHash(passwordEncoder.encode(CharBuffer.wrap(userDto.getPassword())));
-
-        User savedUser = userRepository.save(user);
-        return savedUser;
-    }
+//    public User register(SignUpDto userDto) {
+//        Optional<User> optionalUser = userRepository.findByEmail(userDto.getUsername());
+//
+//        if (optionalUser.isPresent()) {
+//            throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        User user = userMapper.signUpToUser(userDto);
+//        System.out.println(user.toString());
+//        user.setPasswordHash(passwordEncoder.encode(CharBuffer.wrap(userDto.getPassword())));
+//
+//        User savedUser = userRepository.save(user);
+//        return savedUser;
+//    }
 }
