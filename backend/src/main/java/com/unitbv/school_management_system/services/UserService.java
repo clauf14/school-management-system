@@ -74,18 +74,18 @@ public class UserService {
         throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
 
-//    public User register(SignUpDto userDto) {
-//        Optional<User> optionalUser = userRepository.findByEmail(userDto.getUsername());
-//
-//        if (optionalUser.isPresent()) {
-//            throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
-//        }
-//
-//        User user = userMapper.signUpToUser(userDto);
-//        System.out.println(user.toString());
-//        user.setPasswordHash(passwordEncoder.encode(CharBuffer.wrap(userDto.getPassword())));
-//
-//        User savedUser = userRepository.save(user);
-//        return savedUser;
-//    }
+    public User register(SignUpDto userDto) {
+        Optional<User> optionalUser = userRepository.findByEmail(userDto.getUsername());
+
+        if (optionalUser.isPresent()) {
+            throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
+        }
+
+        User user = userMapper.signUpToUser(userDto);
+        System.out.println(user.toString());
+        user.setPasswordHash(passwordEncoder.encode(CharBuffer.wrap(userDto.getPassword())));
+
+        User savedUser = userRepository.save(user);
+        return savedUser;
+    }
 }
