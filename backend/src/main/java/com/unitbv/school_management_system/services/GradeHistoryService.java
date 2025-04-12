@@ -6,7 +6,6 @@ import com.unitbv.school_management_system.repositories.GradeHistoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GradeHistoryService {
@@ -37,6 +36,8 @@ public class GradeHistoryService {
         gradeHistoryToUpdate.setNewScore(gradeHistory.getNewScore());
         gradeHistoryToUpdate.setChangedBy(gradeHistory.getChangedBy());
         gradeHistoryToUpdate.setChangedAt(gradeHistory.getChangedAt());
+        gradeHistoryToUpdate.setStudentId(gradeHistory.getStudentId());
+        gradeHistoryToUpdate.setCourseId(gradeHistory.getCourseId());
 
 
         return gradeHistoryRepository.save(gradeHistoryToUpdate);
@@ -48,4 +49,7 @@ public class GradeHistoryService {
         }
         gradeHistoryRepository.deleteById(gradeHistoryId);
     }
-}
+
+    public List<GradeHistory> getGradeHistoriesByCourseAndStudent(Integer courseId, Integer studentId) {
+        return gradeHistoryRepository.getGradeHistoryByCourseIdAndStudentId(studentId, courseId);
+    }}

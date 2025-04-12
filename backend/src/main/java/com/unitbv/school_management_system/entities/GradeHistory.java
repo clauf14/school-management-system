@@ -19,6 +19,12 @@ public class GradeHistory {
     @Column(name = "grade_id", nullable = false)
     private Integer gradeId;
 
+    @Column(name = "student_id", nullable = false)
+    private Integer studentId;
+
+    @Column(name = "course_id", nullable = false)
+    private Integer courseId;
+
     @Column(nullable = false)
     private Double oldScore;
 
