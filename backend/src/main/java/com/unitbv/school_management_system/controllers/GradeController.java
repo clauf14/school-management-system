@@ -22,7 +22,6 @@ public class GradeController {
     }
 
 
-
     @GetMapping("/{gradeId}")
     public Grade getGrade(@PathVariable Integer gradeId) {
         return gradeService.getGrade(gradeId);
@@ -43,6 +42,19 @@ public class GradeController {
         gradeService.deleteGrade(gradeId);
     }
 
+    @GetMapping("/course/{courseId}/student/{studentId}")
+    public List<Grade> getGradesByCourseAndStudent(@PathVariable Integer courseId, @PathVariable Integer studentId) {
+        return gradeService.getAllGradesByCourseAndStudent(courseId, studentId);
+    }
+
+    @PostMapping("/course/{courseId}/student/{studentId}")
+    public Grade createGrade(@PathVariable Integer studentId, @PathVariable Integer courseId, @RequestBody Grade grade) {
+
+        grade.setStudentId(studentId);
+        grade.setCourseId(courseId);
+
+        return gradeService.createGrade(grade);
+    }
 
 
 }

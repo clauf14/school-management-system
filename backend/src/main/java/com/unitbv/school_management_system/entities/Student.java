@@ -22,6 +22,9 @@ public class Student {
     @Column(name = "teacher_id")
     private String teacherId;
 
+    @Column(name = "course_id")
+    private String courseId;
+
     @Column(nullable = false)
     private String firstName;
 
