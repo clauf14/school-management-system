@@ -1,5 +1,6 @@
 package com.unitbv.school_management_system.controllers;
 
+import com.unitbv.school_management_system.entities.Grade;
 import com.unitbv.school_management_system.entities.Student;
 import com.unitbv.school_management_system.services.StudentService;
 import org.springframework.web.bind.annotation.*;
@@ -40,5 +41,12 @@ public class StudentController {
     @DeleteMapping("/{studentId}")
     public void deleteStudent(@PathVariable Integer studentId) {
         studentService.deleteStudent(studentId);
+    }
+
+    @GetMapping("/course/{courseId}/student/{teacherId}")
+    public List<Student> getStudentsByCourseAndTeacher(
+            @PathVariable String courseId,
+            @PathVariable String teacherId) {
+        return studentService.getAllStudentsByCourseAndTeacher(courseId, teacherId);
     }
 }

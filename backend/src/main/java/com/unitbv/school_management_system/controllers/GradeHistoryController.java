@@ -1,5 +1,6 @@
 package com.unitbv.school_management_system.controllers;
 
+import com.unitbv.school_management_system.entities.Grade;
 import com.unitbv.school_management_system.entities.GradeHistory;
 import com.unitbv.school_management_system.services.GradeHistoryService;
 import org.springframework.web.bind.annotation.*;
@@ -41,4 +42,8 @@ public class GradeHistoryController {
         gradeHistoryService.deleteGradeHistory(gradeHistoryId);
     }
 
+    @GetMapping("/course/{courseId}/student/{studentId}")
+    public List<GradeHistory> getGradesByCourseAndStudent(@PathVariable Integer courseId, @PathVariable Integer studentId) {
+        return gradeHistoryService.getAllGradeHistoriesByCourseAndStudent(courseId, studentId);
+    }
 }

@@ -1,6 +1,7 @@
 package com.unitbv.school_management_system.services;
 
 
+import com.unitbv.school_management_system.entities.Grade;
 import com.unitbv.school_management_system.entities.GradeHistory;
 import com.unitbv.school_management_system.repositories.GradeHistoryRepository;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,10 @@ public class GradeHistoryService {
             throw new IllegalStateException(String.format("GradeHistory with ID %s doesn't exist", gradeHistoryId));
         }
         gradeHistoryRepository.deleteById(gradeHistoryId);
+    }
+
+    public List<GradeHistory> getAllGradeHistoriesByCourseAndStudent(Integer courseId, Integer studentId) {
+        return gradeHistoryRepository.findGradeHistoriesByCourseIdAndStudentId(courseId, studentId);
     }
 }
 

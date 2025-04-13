@@ -3,6 +3,7 @@ package com.unitbv.school_management_system.services;
 import com.unitbv.school_management_system.entities.Grade;
 import com.unitbv.school_management_system.repositories.GradeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -18,7 +19,6 @@ public class GradeService {
     public Grade createGrade(Grade grade) {
         return gradeRepository.save(grade);
     }
-
 
 
     public Grade getGrade(Integer gradeId) {
@@ -43,21 +43,6 @@ public class GradeService {
         return gradeRepository.save(gradeToUpdate);
     }
 
-    public Grade updateGradeByCourseAndStudent(Integer gradeId, Integer courseId, Integer studentId, Grade grade) {
-        Grade gradeToUpdate = gradeRepository.findById(gradeId).orElseThrow(() -> new IllegalStateException(String.format("Grade with ID %s doesn't exist", gradeId)));
-
-
-        gradeToUpdate.setCourseId(courseId);
-        gradeToUpdate.setStudentId(studentId);
-        gradeToUpdate.setCourseId(grade.getCourseId());
-        gradeToUpdate.setAssignmentId(grade.getAssignmentId());
-        gradeToUpdate.setScore(grade.getScore());
-        gradeToUpdate.setGradedAt(grade.getGradedAt());
-        gradeToUpdate.setUpdatedAt(grade.getUpdatedAt());
-
-
-        return gradeRepository.save(gradeToUpdate);
-    }
 
     public void deleteGrade(Integer gradeId) {
         if (!gradeRepository.existsById(gradeId)) {
@@ -65,6 +50,11 @@ public class GradeService {
         }
         gradeRepository.deleteById(gradeId);
     }
+
+    public List<Grade> getAllGradesByCourseAndStudent(Integer courseId, Integer studentId) {
+        return gradeRepository.findGradesByCourseIdAndStudentId(courseId, studentId);
+    }
+
 
 
 }

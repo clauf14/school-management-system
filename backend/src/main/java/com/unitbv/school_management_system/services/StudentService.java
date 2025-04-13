@@ -47,4 +47,7 @@ public class StudentService {
         }
         studentRepository.deleteById(studentId);
     }
+    public List<Student> getAllStudentsByCourseAndTeacher(String courseId, String teacherId) {
+        return studentRepository.findStudentsByCourseIdAndTeacherId(courseId, teacherId);
+    }
 }
