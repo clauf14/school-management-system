@@ -48,7 +48,7 @@ public class GradeController {
     }
 
     @PostMapping("/course/{courseId}/student/{studentId}")
-    public Grade createGrade(@PathVariable Integer studentId, @PathVariable Integer courseId, @RequestBody Grade grade) {
+    public Grade createGrade(@PathVariable Integer courseId, @PathVariable Integer studentId, @RequestBody Grade grade) {
 
         grade.setStudentId(studentId);
         grade.setCourseId(courseId);
