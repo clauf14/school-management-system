@@ -49,7 +49,6 @@ public class GradeHistoryService {
         }
         gradeHistoryRepository.deleteById(gradeHistoryId);
     }
+}
 
-    public List<GradeHistory> getGradeHistoriesByCourseAndStudent(Integer courseId, Integer studentId) {
-        return gradeHistoryRepository.getGradeHistoryByCourseIdAndStudentId(studentId, courseId);
-    }}
+

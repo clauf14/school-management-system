@@ -19,9 +19,7 @@ public class GradeService {
         return gradeRepository.save(grade);
     }
 
-    public Grade addGradeByCourseAndStudent(Integer courseId, Integer studentId, Grade grade) {
-        return gradeRepository.addGradeByCourseIdAndStudentId(courseId, studentId, grade);
-    }
+
 
     public Grade getGrade(Integer gradeId) {
         return gradeRepository.findById(gradeId).orElseThrow(() -> new IllegalArgumentException(String.format("Grade with ID %s doesn't exist", gradeId)));
@@ -67,8 +65,6 @@ public class GradeService {
         }
         gradeRepository.deleteById(gradeId);
     }
-    public List<Grade> getGradesByCourseAndStudent(Integer courseId, Integer studentId) {
-        return gradeRepository.getGradesByCourseIdAndStudentId(courseId, studentId);
-    }
+
 
 }

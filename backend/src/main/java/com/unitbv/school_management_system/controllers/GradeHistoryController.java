@@ -40,9 +40,5 @@ public class GradeHistoryController {
     public void deleteGradeHistory(@PathVariable Integer gradeHistoryId) {
         gradeHistoryService.deleteGradeHistory(gradeHistoryId);
     }
-    @GetMapping("/student/{studentId}/course/{courseId}")
-    public List<GradeHistory> getGradeHistoryByStudentAndCourse(@PathVariable Integer studentId,
-                                                                @PathVariable Integer courseId) {
-        return gradeHistoryService.getGradeHistoriesByCourseAndStudent(courseId, studentId);
-    }
+
 }

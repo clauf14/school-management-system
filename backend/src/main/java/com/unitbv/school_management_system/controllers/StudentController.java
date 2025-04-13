@@ -31,12 +31,6 @@ public class StudentController {
         return studentService.getAllStudents();
     }
 
-    @GetMapping("/course/{courseId}/teacher/{teacherId}")
-    public List<Student> getAllStudentsByCourseAndTeacher(
-            @PathVariable Integer courseId,
-            @PathVariable Integer teacherId) {
-        return studentService.getAllStudentsByCourseAndTeacher(courseId, teacherId);
-    }
 
     @PutMapping("/{studentId}")
     public Student updateStudent(@PathVariable Integer studentId, @RequestBody Student student) {
