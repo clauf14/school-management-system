@@ -3,7 +3,7 @@ import "./login.css"
 import { useState, useEffect, useRef } from "react"
 // import {useNavigate} from "react-router-dom"
 import { Link } from "react-router-dom"
-import { request } from "../axios_helper"
+import { removeAuthenticationToken, request, setAuthenticationToken } from "../axios_helper"
 
 const LogInComponent = () => {
   const userRef = useRef()
@@ -23,24 +23,44 @@ const LogInComponent = () => {
     }
   }, [email, password])
 
-  const handleLogin = async (e) => {
+  //for test
+  const setAuthToken = () => {
+    //test fara login, decomentati daca vreti sa faceti test fara login si comentati partea cu login
+    //tokenu asta e valid pana in 21 aprilie
+    setAuthenticationToken(
+      "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlkIjoxMywiZXhwIjoxNzQ1MjE4ODg2LCJpYXQiOjE3NDQ2MTQwODYsImVtYWlsIjoidGVzdCJ9.tP3zU4Sx2wqrBCpNLDoSpq3kdp7SGIfh235iilKk514"
+    )
+    console.log("test auth token set")
+  }
+
+  const handleLogin = (e) => {
     e.preventDefault()
-    try {
-      console.log("Sending login request...")
-      const response = await request("POST", "/login", {
-        email: email,
-        password: password,
-      })
-      console.log("Login response:", response.data)
-      // optionally navigate after login
-      // navigate("/dashboard");
-    } catch (error) {
-      console.error("Login error:", error.response ? error.response.data : error.message)
+    if (window.localStorage.getItem("auth_token") != null) {
+      removeAuthenticationToken()
     }
+
+    request("POST", "/login", {
+      email: email,
+      password: password,
+    })
+      .then((response) => {
+        setAuthenticationToken(response.data.token)
+
+        localStorage.setItem("loginInfo", JSON.stringify(response.data))
+        console.log("Login successfull")
+        console.log("Auth token saved to local storage")
+
+        //router.push("/dashboard") // or "/shop" depending on where you want to go
+      })
+      .catch((error) => {
+        console.error("Login error:", error.response ? error.response.data : error.message)
+      })
   }
 
   return (
     <div className="login-page">
+      {/* for test */}
+      <button onClick={setAuthToken}>Set Auth Token for test</button>
       <div className="login-container">
         <h3>Log In</h3>
         <form onSubmit={handleLogin}>
