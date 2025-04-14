@@ -3,6 +3,7 @@ import "./signup.css"
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import AuthService from "../service/AuthService.jsx";
+import { removeAuthenticationToken, request, setAuthenticationToken } from "../axios_helper";
 
 const SignUpComponent = () => {
 
@@ -13,13 +14,14 @@ const SignUpComponent = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [role, setRole] = useState("");
 
-    /*
+
     useEffect(() => {
-        userRef.current.focus();
-    }, [])
+        console.log(role);
+    }, [role])
 
-     */
+
 
     const handleSignUp = async (e) => {
         e.preventDefault();
@@ -30,17 +32,32 @@ const SignUpComponent = () => {
             }
             if (!validateEmail(email)) {
                 alert("Please enter valid email");
+                return;
             }
             if (password !== confirmPassword) {
                 alert("Passwords don't match");
                 return;
             }
-            const response = await AuthService.register(username, email, password);
-            if (response.status === 200) {
-                navigate('/login');
-            } else {
-                console.log(response.data);
+
+            if (window.localStorage.getItem("auth_token") != null) {
+                removeAuthenticationToken()
+                console.log("removed")
             }
+
+            request("POST", "/register", {
+                username: username,
+                email: email,
+                password: password,
+                role: role,
+                createdAt: new Date().toISOString()
+            })
+                .then((response) => {
+                    console.log("New user added!")
+                    setAuthenticationToken(response.data.token)
+                })
+                .catch((error) => {
+                    console.error("Error adding user:", error)
+                });
         } catch (err) {
             console.log(err);
         }
@@ -56,7 +73,7 @@ const SignUpComponent = () => {
 
     return (
         <div className="register-page">
-            <div className="login-container">
+            <div className="signup-container">
                 <h3>Sign up</h3>
                 <form>
                     <label>Username</label>
@@ -91,6 +108,25 @@ const SignUpComponent = () => {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         value={confirmPassword}
                     />
+                    <label>Role:</label>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <label>Teacher</label>
+                        <input
+                            style={{width:'50%'}}
+                            type="radio"
+                            name="role"
+                            onChange={(e) => setRole(e.target.value)}
+                            value={"TEACHER"}
+                        />
+                        <label>Student</label>
+                        <input
+                            style={{width:'50%'}}
+                            type="radio"
+                            name="role"
+                            onChange={(e) => setRole(e.target.value)}
+                            value={"STUDENT"}
+                        />
+                    </div>
                     <button type="submit" onClick={handleSignUp}>Sign up</button>
                 </form>
                 <p>
