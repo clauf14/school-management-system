@@ -4,6 +4,7 @@ import './listOfCourses.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { request } from "../axios_helper";
 
 const EnrolledCourses = () => {
     const { id } = useParams();
@@ -33,20 +34,14 @@ const EnrolledCourses = () => {
         setLoading(true);
 
         const studentId = id;
-        console.log("teacher: " + studentId);
+        const url = "/api/enrollment/all/" + studentId;
+        console.log("student: " + studentId);
 
         try {
-            const response = await fetch(`http://localhost:8080/api/enrollment/all/${studentId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            });
+            const response = await request("GET", url);
 
-            if (response.ok) {
-                const data = await response.json();
-                console.log(data);
-                setCourses(data);
+            if (response.data) {
+                setCourses(response.data);
             } else {
                 console.error('Error:', response.status);
             }
