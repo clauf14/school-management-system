@@ -54,8 +54,8 @@ const ListOfCoursesComponent = () => {
             });
 
             console.log(response.data);
-            setIsDialogOpen(false); // Închide dialogul după crearea cursului
-            fetchTableData(id); // Actualizează lista de cursuri
+            setIsDialogOpen(false);
+            fetchTableData(id);
         } catch (error) {
             console.error("Eroare:", error);
         }
@@ -123,7 +123,6 @@ const ListOfCoursesComponent = () => {
                     />
                 </div>
 
-                {/* Dialog HTML5 */}
                 <dialog open={isDialogOpen}>
                     <form onSubmit={handleSubmit}>
                         <h3>Create New Course</h3>

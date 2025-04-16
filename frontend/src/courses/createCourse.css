@@ -1,4 +1,3 @@
-/* Stilizarea dialogului */
 dialog {
     width: 400px;
     padding: 30px;
@@ -8,19 +7,17 @@ dialog {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Asigură că dialogul este centrat pe mijlocul ecranului */
+    transform: translate(-50%, -50%); 
     border: none;
     z-index: 1000;
     transition: opacity 0.3s ease;
 }
 
-/* Backdrop pentru dialog */
 dialog::backdrop {
-    background-color: rgba(0, 0, 0, 0.5); /* Fundal semi-transparent */
-    backdrop-filter: blur(4px); /* Efect de blur pe fundal */
+    background-color: rgba(0, 0, 0, 0.5); 
+    backdrop-filter: blur(4px); 
 }
 
-/* Titlu dialog */
 dialog h3 {
     font-size: 22px;
     margin-bottom: 20px;
@@ -28,14 +25,12 @@ dialog h3 {
     text-align: center;
 }
 
-/* Formularul din dialog */
 form {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-/* Inputuri din formular */
 input {
     width: 100%;
     padding: 10px;
@@ -51,7 +46,6 @@ input:focus {
     box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
 }
 
-/* Butoane din dialog */
 button {
     padding: 10px 20px;
     font-size: 16px;
@@ -80,14 +74,12 @@ button[type="submit"]:hover {
     background-color: #0056b3;
 }
 
-/* Containere pentru butoane */
 div.dialog-buttons {
     display: flex;
     justify-content: space-between;
     gap: 10px;
 }
 
-/* Stil pentru fundalul paginii atunci când dialogul este deschis */
 .login-page {
     position: relative;
 }
@@ -99,11 +91,10 @@ div.dialog-buttons {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.3);
-    display: none; /* Se va afișa doar când dialogul este activ */
+    display: none; 
     z-index: 999;
 }
 
-/* Afișează overlay-ul */
 .login-page.dialog-active .overlay {
     display: block;
 }
