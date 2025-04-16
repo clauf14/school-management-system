@@ -16,7 +16,9 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    public Course createCourse(Course course) {
+    public Course createCourse(Course course, Integer teacherId) {
+        course.setTeacherId(teacherId);
+
         return courseRepository.save(course);
     }
 

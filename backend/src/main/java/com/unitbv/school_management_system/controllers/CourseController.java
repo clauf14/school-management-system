@@ -18,9 +18,9 @@ public class CourseController {
         this.courseService = courseService;
     }
 
-    @PostMapping
-    public Course addCourse(@RequestBody Course course) {
-        return courseService.createCourse(course);
+    @PostMapping("/{teacherId}")
+    public Course addCourse(@RequestBody Course course, @PathVariable Integer teacherId) {
+        return courseService.createCourse(course, teacherId);
     }
 
     @GetMapping("/{courseId}")
