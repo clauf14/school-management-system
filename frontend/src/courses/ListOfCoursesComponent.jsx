@@ -1,19 +1,25 @@
 import DataTable from "react-data-table-component";
 import './listOfCourses.css';
+import './createCourse.css';
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { request, getAuthenticationToken } from "../axios_helper";
 
 const ListOfCoursesComponent = () => {
     const { id } = useParams();
 
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    const [name, setName] = useState('');
 
     useEffect(() => {
         fetchTableData(id);
     }, [id]);
+
+    console.log(getAuthenticationToken());
 
     const formatDate = (date) => {
         const formattedDate = new Date(date);
@@ -28,29 +34,42 @@ const ListOfCoursesComponent = () => {
         return new Intl.DateTimeFormat('en-US', options).format(formattedDate);
     }
 
+    const handleAddCourse = () => {
+        setIsDialogOpen(true);
+    };
+
+    const handleCloseDialog = () => {
+        setIsDialogOpen(false);
+        setName('')
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await request('POST', `api/course/${id}`, {
+                courseName: name,
+                teacherId: id,
+                createdAt: new Date().toISOString()
+            });
+
+            console.log(response.data);
+            setIsDialogOpen(false); // Închide dialogul după crearea cursului
+            fetchTableData(id); // Actualizează lista de cursuri
+        } catch (error) {
+            console.error("Eroare:", error);
+        }
+    };
+
     const fetchTableData = async (id) => {
         setLoading(true);
 
-        const teacherId = id;
-        console.log("teacher: " + teacherId);
-
         try {
-            const response = await fetch(`http://localhost:8080/api/course/all/${teacherId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            });
+            const response = await request("GET", `/api/course/all/${id}`);
 
-            if (response.ok) {
-                const data = await response.json();
-                console.log(data);
-                setCourses(data);
-            } else {
-                console.error('Error:', response.status);
-            }
-        } catch (err) {
-            console.error("Eroare:", err);
+            setCourses(response.data);
+        } catch (error) {
+            console.error("Eroare:", error);
         } finally {
             setLoading(false);
         }
@@ -87,8 +106,12 @@ const ListOfCoursesComponent = () => {
         <div className="data-table">
             <div className="container">
                 <div className="data-table-wrapper">
+                    <div className="header">
+                        <h2>List of Courses</h2>
+                        <button onClick={handleAddCourse}>Add Course</button>
+                    </div>
+
                     <DataTable
-                        title="List of Courses"
                         columns={columns}
                         data={courses}
                         progressPending={loading}
@@ -99,9 +122,29 @@ const ListOfCoursesComponent = () => {
                         responsive
                     />
                 </div>
+
+                {/* Dialog HTML5 */}
+                <dialog open={isDialogOpen}>
+                    <form onSubmit={handleSubmit}>
+                        <h3>Create New Course</h3>
+                        <label htmlFor="courseName">Course Name:</label>
+                        <input
+                            type="text"
+                            id="courseName"
+                            name="courseName"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <div>
+                            <button type="button" onClick={handleCloseDialog}>Cancel</button>
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+                </dialog>
             </div>
         </div>
-    )
+    );
 }
 
 export default ListOfCoursesComponent;

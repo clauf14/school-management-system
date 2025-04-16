@@ -16,7 +16,16 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    public Course createCourse(Course course) {
+    public Course createCourse(Course course, Integer teacherId) {
+        // Verifici dacă courseName nu este null și nu este gol
+        if (course.getCourseName() == null || course.getCourseName().isEmpty()) {
+            throw new IllegalArgumentException("Course name cannot be null or empty");
+        }
+
+        // Creezi un nou obiect de curs și setezi teacherId
+        course.setTeacherId(teacherId);
+
+        // Salvezi cursul în baza de date
         return courseRepository.save(course);
     }
 

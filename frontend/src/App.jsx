@@ -13,7 +13,9 @@ function App() {
       <Routes>
         <Route path='/login' element={<LogInComponent />} />
         <Route path='/register' element={<SignUpComponent />} />
+
         <Route path='/courses/:id' element={<ListOfCoursesComponent />} />
+
         <Route path='/enrollments/:id' element={<EnrolledCourses />} />
       </Routes>
     </Router>
