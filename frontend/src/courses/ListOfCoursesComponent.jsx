@@ -1,6 +1,9 @@
 import DataTable from "react-data-table-component";
 import './listOfCourses.css';
+
 import './createCourses.css';
+import './createCoursess.css';
+
 
 import { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
