@@ -1,8 +1,8 @@
 import "./login.css"
 
 import { useState, useEffect, useRef } from "react"
-// import {useNavigate} from "react-router-dom"
 import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import { removeAuthenticationToken, request, setAuthenticationToken } from "../axios_helper"
 
 const LogInComponent = () => {
@@ -11,6 +11,8 @@ const LogInComponent = () => {
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     userRef.current.focus()
@@ -49,6 +51,14 @@ const LogInComponent = () => {
         localStorage.setItem("loginInfo", JSON.stringify(response.data))
         console.log("Login successfull")
         console.log("Auth token saved to local storage")
+
+        const data = response.data
+        if (data.role == "TEACHER") {
+          navigate(`/courses/${data.userId}`)
+        }
+        else if (data.role == "STUDENT") {
+          navigate(`/enrollments/${data.userId}`)
+        }
 
         //router.push("/dashboard") // or "/shop" depending on where you want to go
       })
@@ -90,3 +100,5 @@ const LogInComponent = () => {
 }
 
 export default LogInComponent
+
+// enrollments/:id (student)
