@@ -4,9 +4,11 @@ import { useState, useEffect, useRef } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom";
 import { removeAuthenticationToken, request, setAuthenticationToken } from "../axios_helper"
+import {useAuth} from "../service/AuthContext.jsx";
 
 const LogInComponent = () => {
   const userRef = useRef()
+  const auth = useAuth();
   //   const navigate = useNavigate()
 
   const [email, setEmail] = useState("")
@@ -40,31 +42,7 @@ const LogInComponent = () => {
     if (window.localStorage.getItem("auth_token") != null) {
       removeAuthenticationToken()
     }
-
-    request("POST", "/login", {
-      email: email,
-      password: password,
-    })
-      .then((response) => {
-        setAuthenticationToken(response.data.token)
-
-        localStorage.setItem("loginInfo", JSON.stringify(response.data))
-        console.log("Login successfull")
-        console.log("Auth token saved to local storage")
-
-        const data = response.data
-        if (data.role == "TEACHER") {
-          navigate(`/courses/${data.userId}`)
-        }
-        else if (data.role == "STUDENT") {
-          navigate(`/enrollments/${data.userId}`)
-        }
-
-        //router.push("/dashboard") // or "/shop" depending on where you want to go
-      })
-      .catch((error) => {
-        console.error("Login error:", error.response ? error.response.data : error.message)
-      })
+    auth.login(email, password)
   }
 
   return (

@@ -13,7 +13,7 @@ import lombok.*;
 public class Enrollment {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer enrollmentId;
 
     @Column(name = "student_id", nullable = false)

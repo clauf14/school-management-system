@@ -13,7 +13,7 @@ import lombok.*;
 public class Teacher {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer teacherId;
 
     @Column(name = "user_id", unique = true, nullable = false)

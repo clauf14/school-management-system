@@ -54,10 +54,14 @@ const SignUpComponent = () => {
                 .then((response) => {
                     console.log("New user added!")
                     setAuthenticationToken(response.data.token)
+
+                    const data = response.id;
                 })
                 .catch((error) => {
                     console.error("Error adding user:", error)
                 });
+
+
         } catch (err) {
             console.log(err);
         }

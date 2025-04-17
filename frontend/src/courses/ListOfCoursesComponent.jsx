@@ -1,8 +1,6 @@
 import DataTable from "react-data-table-component";
 import './listOfCourses.css';
-
 import './createCourses.css';
-import './createCoursess.css';
 
 
 import { useState, useEffect } from 'react';
@@ -48,7 +46,7 @@ const ListOfCoursesComponent = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        console.log(id);
         try {
             const response = await request('POST', `api/course/${id}`, {
                 courseName: name,
@@ -71,6 +69,7 @@ const ListOfCoursesComponent = () => {
             const response = await request("GET", `/api/course/all/${id}`);
 
             setCourses(response.data);
+            console.log("courses: " + courses);
         } catch (error) {
             console.error("Eroare:", error);
         } finally {
