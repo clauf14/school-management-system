@@ -19,20 +19,11 @@ public class Student {
     @Column(name = "user_id", nullable = false, unique = true)
     private Integer userId;
 
-    @Column(name = "teacher_id")
-    private String teacherId;
-
-    @Column(name = "course_id")
-    private String courseId;
-
     @Column(nullable = false)
     private String firstName;
 
     @Column(nullable = false)
     private String lastName;
-
-    @Column(nullable = false)
-    private java.sql.Date dob;
 
     @Column(nullable = false, updatable = false)
     private java.sql.Timestamp createdAt;

@@ -35,7 +35,6 @@ public class StudentService {
         studentToUpdate.setUserId(student.getUserId());
         studentToUpdate.setFirstName(student.getFirstName());
         studentToUpdate.setLastName(student.getLastName());
-        studentToUpdate.setDob(student.getDob());
         studentToUpdate.setUpdatedAt(student.getUpdatedAt());
 
         return studentRepository.save(studentToUpdate);
@@ -46,8 +45,5 @@ public class StudentService {
             throw new IllegalStateException(String.format("Student with ID %s doesn't exist", studentId));
         }
         studentRepository.deleteById(studentId);
-    }
-    public List<Student> getAllStudentsByCourseAndTeacher(String courseId, String teacherId) {
-        return studentRepository.findStudentsByCourseIdAndTeacherId(courseId, teacherId);
     }
 }
