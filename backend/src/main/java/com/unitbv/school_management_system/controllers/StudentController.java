@@ -27,6 +27,11 @@ public class StudentController {
         return studentService.getStudent(studentId);
     }
 
+    @GetMapping("/by/{email}")
+    public Student getStudentByEmail(@PathVariable String email) {
+        return studentService.getStudentByEmail(email);
+    }
+
     @GetMapping
     public List<Student> getStudents() {
         return studentService.getAllStudents();
