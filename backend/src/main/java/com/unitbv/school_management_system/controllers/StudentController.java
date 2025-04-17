@@ -43,10 +43,10 @@ public class StudentController {
         studentService.deleteStudent(studentId);
     }
 
-    @GetMapping("/course/{courseId}/student/{teacherId}")
-    public List<Student> getStudentsByCourseAndTeacher(
-            @PathVariable String courseId,
-            @PathVariable String teacherId) {
-        return studentService.getAllStudentsByCourseAndTeacher(courseId, teacherId);
-    }
+//    @GetMapping("/course/{courseId}/student/{teacherId}")
+//    public List<Student> getStudentsByCourseAndTeacher(
+//            @PathVariable String courseId,
+//            @PathVariable String teacherId) {
+//        return studentService.getAllStudentsByCourseAndTeacher(courseId, teacherId);
+//    }
 }
