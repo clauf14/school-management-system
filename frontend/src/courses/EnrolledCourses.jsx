@@ -34,13 +34,11 @@ const EnrolledCourses = () => {
         setLoading(true);
 
         const studentId = id;
-        const url = "/api/enrollment/all/" + studentId;
-        console.log("student: " + studentId);
 
         try {
-            const response = await request("GET", url);
+            const response = await request("GET", `http://localhost:8080/api/enrollment/all/${studentId}`);
 
-            if (response.data) {
+            if (response.status === 200) {
                 setCourses(response.data);
             } else {
                 console.error('Error:', response.status);

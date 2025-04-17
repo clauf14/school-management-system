@@ -13,7 +13,7 @@ import lombok.*;
 public class GradeHistory {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer historyId;
 
     @Column(name = "grade_id", nullable = false)

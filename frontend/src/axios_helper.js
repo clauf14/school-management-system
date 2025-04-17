@@ -45,8 +45,8 @@ axios.interceptors.response.use(
   (error) => {
     //daca response nu e athorizat, da redirect la login, adica daca tokenu e expirat
     if (error.response && error.response.status === 401) {
-      removeAuthenticationToken()
-      window.localStorage.removeItem("loginInfo")
+      //removeAuthenticationToken()
+      //window.localStorage.removeItem("loginInfo")
       //puneti voi redirect pe pagina de login
       //--------------
       //window.location.href = `/login?message=${encodeURIComponent("Your authentication token has expired. Please login again!")}`

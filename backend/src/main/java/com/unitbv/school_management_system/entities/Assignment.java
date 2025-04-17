@@ -13,7 +13,7 @@ import lombok.*;
 public class Assignment {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer assignmentId;
 
     @Column(name = "course_id", nullable = false)

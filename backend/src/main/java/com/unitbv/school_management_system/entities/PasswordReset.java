@@ -13,7 +13,7 @@ import lombok.*;
 public class PasswordReset {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer resetId;
 
     @Column(name = "user_id", nullable = false)
