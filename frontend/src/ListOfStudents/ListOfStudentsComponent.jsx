@@ -1,30 +1,38 @@
 import DataTable from "react-data-table-component";
-import './listOfCourses.css';
-import './createCourses.css';
 
 
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { request, getAuthenticationToken } from "../axios_helper";
 
-const ListOfCoursesComponent = () => {
-    
-    // teacher id
+const ListOfStudentsComponent = () => {
+
+    // course id
     const { id } = useParams();
 
-    const [courses, setCourses] = useState([]);
-    const [name, setName] = useState('');
+    const [enrollment, setEnrollment] = useState([]);
+    const [students, setStudents] = useState([]);
+
+    const [studentEmail, setStudentEmail] = useState('');
 
     const [loading, setLoading] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const navigate = useNavigate();
 
+    console.log(getAuthenticationToken());
+
     useEffect(() => {
-        fetchTableData(id);
+        if (id) {
+            fetchTableData(id);
+        }
     }, [id]);
 
-    console.log(getAuthenticationToken());
+    useEffect(() => {
+        if (students) {
+            console.log(students);
+        }
+    }, [students]);
 
     const formatDate = (date) => {
         const formattedDate = new Date(date);
@@ -39,7 +47,7 @@ const ListOfCoursesComponent = () => {
         return new Intl.DateTimeFormat('en-US', options).format(formattedDate);
     }
 
-    const handleAddCourse = () => {
+    const handleAddStudent = () => {
         setIsDialogOpen(true);
     };
 
@@ -48,13 +56,28 @@ const ListOfCoursesComponent = () => {
         setName('')
     };
 
+    const getStudent = async (studentEmail) => {
+
+        try {
+            const response = await request("GET", `/api/student/by/${studentEmail}`);
+
+            return response.data.studentId
+        } catch (error) {
+            console.error("Eroare:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(id);
+
+        const studentId = await getStudent(studentEmail);
+
         try {
-            const response = await request('POST', `api/course/${id}`, {
-                courseName: name,
-                teacherId: id,
+            const response = await request('POST', 'api/enrollment', {
+                studentId: studentId,
+                courseId: id,
                 createdAt: new Date().toISOString()
             });
 
@@ -70,10 +93,10 @@ const ListOfCoursesComponent = () => {
         setLoading(true);
 
         try {
-            const response = await request("GET", `/api/course/all/${id}`);
+            const response = await request("GET", `/api/enrollment/all/${id}`);
 
-            setCourses(response.data);
-            console.log("courses: " + courses);
+            setStudents(response.data.map((enrollment) => enrollment.student));
+            console.log(response);
         } catch (error) {
             console.error("Eroare:", error);
         } finally {
@@ -81,18 +104,14 @@ const ListOfCoursesComponent = () => {
         }
     };
 
-    const handleUserProfile = (courseId) => {
-        navigate(`/list-students/${courseId}`)
-    }
-
     const columns = [
         {
             name: "ID",
-            selector: (row) => row.courseId,
+            selector: (row) => row.studentId,
         },
         {
-            name: "Name",
-            selector: (row) => row.courseName,
+            name: "Student name",
+            selector: (row) => row.firstName + " " + row.lastName,
         },
         {
             name: "CreatedAt",
@@ -102,14 +121,6 @@ const ListOfCoursesComponent = () => {
             name: "UpdatedAt",
             selector: (row) => formatDate(row.updatedAt),
         },
-        {
-            name: "See course",
-            cell: (row) => (
-                <button onClick={() => handleUserProfile(row.courseId)}>
-                    See Course
-                </button>
-            ),
-        },
     ];
 
     return (
@@ -117,13 +128,14 @@ const ListOfCoursesComponent = () => {
             <div className="container">
                 <div className="data-table-wrapper">
                     <div className="header">
-                        <h2>List of Courses</h2>
-                        <button onClick={handleAddCourse}>Add Course</button>
+                        <h2>List of students</h2>
+                        <button onClick={handleAddStudent}>Add students</button>
+                        <button>Add assignment</button>
                     </div>
 
                     <DataTable
                         columns={columns}
-                        data={courses}
+                        data={students}
                         progressPending={loading}
                         pagination
                         paginationPerPage={5}
@@ -136,13 +148,13 @@ const ListOfCoursesComponent = () => {
                 <dialog open={isDialogOpen}>
                     <form onSubmit={handleSubmit}>
                         <h3>Create New Course</h3>
-                        <label htmlFor="courseName">Course Name:</label>
+                        <label htmlFor="courseName">Student email:</label>
                         <input
                             type="text"
                             id="courseName"
                             name="courseName"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            value={studentEmail}
+                            onChange={(e) => setStudentEmail(e.target.value)}
                             required
                         />
                         <div>
@@ -156,4 +168,4 @@ const ListOfCoursesComponent = () => {
     );
 }
 
-export default ListOfCoursesComponent;
+export default ListOfStudentsComponent;

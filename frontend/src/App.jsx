@@ -8,22 +8,27 @@ import EnrolledCourses from "./courses/EnrolledCourses.jsx";
 import ProfileComponent from "./profile/ProfileComponent.jsx";
 import Navbar from './layout/Navbar';
 import ProtectedRoute from './service/ProtectedRoute';
-import {useLocation} from "react-router";
-import {AuthProvider} from "./service/AuthContext.jsx";
+import { useLocation } from "react-router";
+import { AuthProvider } from "./service/AuthContext.jsx";
+import ListOfStudentsComponent from './ListOfStudents/ListOfStudentsComponent.jsx';
 
 function App() {
 
   return (
     <Router>
       <AuthProvider>
-      <Navbar />
-      <Routes>
-        <Route path='/login' element={<LogInComponent />} />
-        <Route path='/register' element={<SignUpComponent />} />
-        <Route path='/courses/:id' element={<ProtectedRoute><ListOfCoursesComponent /></ProtectedRoute>} />
-        <Route path='/enrollments/:id' element={<ProtectedRoute><EnrolledCourses /></ProtectedRoute>} />
-        <Route path='/profile' element={<ProtectedRoute><ProfileComponent /></ProtectedRoute>} />
-      </Routes>
+        <Navbar />
+        <Routes>
+          <Route path='/login' element={<LogInComponent />} />
+          <Route path='/register' element={<SignUpComponent />} />
+
+          <Route path='/courses/:id' element={<ProtectedRoute><ListOfCoursesComponent /></ProtectedRoute>} />
+          <Route path='/list-students/:id' element={<ProtectedRoute><ListOfStudentsComponent /></ProtectedRoute>} />
+
+          <Route path='/enrollments/:id' element={<ProtectedRoute><EnrolledCourses /></ProtectedRoute>} />
+
+          <Route path='/profile' element={<ProtectedRoute><ProfileComponent /></ProtectedRoute>} />
+        </Routes>
       </AuthProvider>
     </Router>
   );

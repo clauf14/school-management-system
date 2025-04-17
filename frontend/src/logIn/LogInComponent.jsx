@@ -52,9 +52,9 @@ const LogInComponent = () => {
       <div className="login-container">
         <h3>Log In</h3>
         <form onSubmit={handleLogin}>
-          <label>Email</label>
+          <label>Email: comanmatei91gmail.com</label>
           <input type="text" name="email" ref={userRef} placeholder="Enter your email" autoComplete="off" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <label>Password</label>
+          <label>Password: 1234</label>
           <input type="password" name="password" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} value={password} />
           <button type="submit">Login</button>
         </form>
