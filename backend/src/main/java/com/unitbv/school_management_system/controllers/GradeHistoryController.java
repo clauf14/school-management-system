@@ -2,6 +2,7 @@ package com.unitbv.school_management_system.controllers;
 
 import com.unitbv.school_management_system.entities.Grade;
 import com.unitbv.school_management_system.entities.GradeHistory;
+import com.unitbv.school_management_system.request.GradeHistoryRequest;
 import com.unitbv.school_management_system.services.GradeHistoryService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,8 @@ public class GradeHistoryController {
     }
 
     @PostMapping
-    public GradeHistory addGradeHistory(@RequestBody GradeHistory gradeHistory) {
-        return gradeHistoryService.createGradeHistory(gradeHistory);
+    public GradeHistory addGradeHistory(@RequestBody GradeHistoryRequest request) {
+        return gradeHistoryService.createGradeHistory(request);
     }
 
     @GetMapping("/{gradeHistoryId}")
@@ -42,8 +43,8 @@ public class GradeHistoryController {
         gradeHistoryService.deleteGradeHistory(gradeHistoryId);
     }
 
-    @GetMapping("/course/{courseId}/student/{studentId}")
-    public List<GradeHistory> getGradesByCourseAndStudent(@PathVariable Integer courseId, @PathVariable Integer studentId) {
-        return gradeHistoryService.getAllGradeHistoriesByCourseAndStudent(courseId, studentId);
+    @GetMapping("/{assignmentId}/{studentId}")
+    public List<GradeHistory> getGradesByCourseAndStudent(@PathVariable Integer assignmentId, @PathVariable Integer studentId) {
+        return gradeHistoryService.getAllGradeHistoriesByAssignmentAndStudent(assignmentId, studentId);
     }
 }

@@ -31,12 +31,8 @@ public class GradeService {
     public Grade updateGrade(Integer gradeId, Grade grade) {
         Grade gradeToUpdate = gradeRepository.findById(gradeId).orElseThrow(() -> new IllegalStateException(String.format("Grade with ID %s doesn't exist", gradeId)));
 
-        gradeToUpdate.setStudentId(grade.getStudentId());
-        gradeToUpdate.setAssignmentId(grade.getAssignmentId());
         gradeToUpdate.setScore(grade.getScore());
-        gradeToUpdate.setGradedAt(grade.getGradedAt());
         gradeToUpdate.setUpdatedAt(grade.getUpdatedAt());
-
 
         return gradeRepository.save(gradeToUpdate);
     }

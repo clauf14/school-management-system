@@ -4,6 +4,8 @@ package com.unitbv.school_management_system.services;
 import com.unitbv.school_management_system.entities.Grade;
 import com.unitbv.school_management_system.entities.GradeHistory;
 import com.unitbv.school_management_system.repositories.GradeHistoryRepository;
+import com.unitbv.school_management_system.repositories.GradeRepository;
+import com.unitbv.school_management_system.request.GradeHistoryRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,11 +15,24 @@ public class GradeHistoryService {
 
     private final GradeHistoryRepository gradeHistoryRepository;
 
-    public GradeHistoryService(GradeHistoryRepository gradeHistoryRepository) {
+    private final GradeRepository gradeRepository;
+
+    public GradeHistoryService(GradeHistoryRepository gradeHistoryRepository,
+                               GradeRepository gradeRepository) {
         this.gradeHistoryRepository = gradeHistoryRepository;
+        this.gradeRepository = gradeRepository;
     }
 
-    public GradeHistory createGradeHistory(GradeHistory gradeHistory) {
+    public GradeHistory createGradeHistory(GradeHistoryRequest request) {
+        Grade grade = gradeRepository.findById(request.getGradeId())
+                .orElseThrow(() -> new RuntimeException("This grade doesn't exist!"));
+
+        GradeHistory gradeHistory = new GradeHistory();
+        gradeHistory.setGrade(grade);
+        gradeHistory.setOldScore(request.getOldScore());
+        gradeHistory.setNewScore(request.getNewScore());
+        gradeHistory.setChangedAt(request.getChangedAt());
+
         return gradeHistoryRepository.save(gradeHistory);
     }
 
@@ -32,14 +47,9 @@ public class GradeHistoryService {
     public GradeHistory updateGradeHistory(Integer gradeHistoryId, GradeHistory gradeHistory) {
         GradeHistory gradeHistoryToUpdate = gradeHistoryRepository.findById(gradeHistoryId).orElseThrow(() -> new IllegalStateException(String.format("GradeHistory with ID %s doesn't exist", gradeHistoryId)));
 
-        gradeHistoryToUpdate.setGradeId(gradeHistory.getGradeId());
         gradeHistoryToUpdate.setOldScore(gradeHistory.getOldScore());
         gradeHistoryToUpdate.setNewScore(gradeHistory.getNewScore());
-        gradeHistoryToUpdate.setChangedBy(gradeHistory.getChangedBy());
         gradeHistoryToUpdate.setChangedAt(gradeHistory.getChangedAt());
-        gradeHistoryToUpdate.setStudentId(gradeHistory.getStudentId());
-        gradeHistoryToUpdate.setCourseId(gradeHistory.getCourseId());
-
 
         return gradeHistoryRepository.save(gradeHistoryToUpdate);
     }
@@ -51,8 +61,8 @@ public class GradeHistoryService {
         gradeHistoryRepository.deleteById(gradeHistoryId);
     }
 
-    public List<GradeHistory> getAllGradeHistoriesByCourseAndStudent(Integer courseId, Integer studentId) {
-        return gradeHistoryRepository.findGradeHistoriesByCourseIdAndStudentId(courseId, studentId);
+    public List<GradeHistory> getAllGradeHistoriesByAssignmentAndStudent(Integer assignmentId, Integer studentId) {
+        return gradeHistoryRepository.findByGrade_AssignmentIdAndGrade_StudentId(assignmentId, studentId);
     }
 }
 

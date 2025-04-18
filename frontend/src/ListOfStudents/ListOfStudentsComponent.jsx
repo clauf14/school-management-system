@@ -18,6 +18,7 @@ const ListOfStudentsComponent = () => {
     const [assignmentMaxScore, setAssignmentMaxScore] = useState('');
 
     const [grade, setGrade] = useState('');
+    const [oldGrade, setOldGrade] = useState(null);
 
     const [isAddStudentDialogOpen, setIsAddStudentDialogOpen] = useState(false);
     const [isAddAssignmentDialogOpen, setIsAddAssignmentDialogOpen] = useState(false);
@@ -36,6 +37,12 @@ const ListOfStudentsComponent = () => {
 
     useEffect(() => {
         if (students) {
+            console.log(assignmentMaxScore);
+        }
+    }, [students]);
+
+    useEffect(() => {
+        if (grade) {
             console.log(students);
         }
     }, [students]);
@@ -91,21 +98,80 @@ const ListOfStudentsComponent = () => {
         }
     }
 
+    const updateGrade = async (gradeId, newScore) => {
+        try {
+            const response = await request("PUT", `/api/grade/${gradeId}`, {
+                score: newScore,
+                updatedAt: new Date().toISOString(), 
+            });
+    
+            setStudents(prevStudents => 
+                prevStudents.map(student => 
+                    student.grades[gradeId] 
+                        ? { 
+                            ...student, 
+                            grades: { 
+                                ...student.grades, 
+                                [gradeId]: response.data 
+                            }
+                        } 
+                        : student
+                )
+            );
+    
+            console.log("Assignments updated:", response.data);
+        } catch (error) {
+            console.error("Error updating grade:", error);
+        }
+    };
+
+    const addToHistoryGrade = async(gradeId, oldScore, newScore) => {
+        try {
+            const response = await request("POST", `/api/grade-history`, {
+                gradeId: gradeId,
+                oldScore: oldScore,
+                newScore: newScore,
+                changedAt: new Date().toISOString(), 
+            });
+    
+            console.log("Grade history:", response.data);
+        } catch (error) {
+            console.error("Error updating grade:", error);
+        }
+    }
+    
+
     const handleGradeSubmit = async (studentId, assignmentId, score) => {
         try {
             if (score !== '' && score !== null) {
-                const response = await request("POST", '/api/grade', {
-                    studentId: studentId,
-                    assignmentId: assignmentId,
-                    score: parseFloat(score),
-                    gradedAt: new Date().toISOString(),
-                });
-                console.log("Grade submitted:", response.data);
+                const parsedScore = parseFloat(score);
+    
+                const existingGrade = students.find(student => student.studentId === studentId)?.grades?.[assignmentId];
+    
+                if (existingGrade) {
+                    await updateGrade(existingGrade.gradeId, parsedScore);  
+
+                    await addToHistoryGrade(existingGrade.gradeId, existingGrade.score, parsedScore)
+
+                    existingGrade.score = parsedScore;
+                } else {
+                    console.log("Creating new grade for student:", studentId, "and assignment:", assignmentId);
+    
+                    const response = await request("POST", '/api/grade', {
+                        studentId: studentId,
+                        assignmentId: assignmentId,
+                        score: parsedScore,
+                        gradedAt: new Date().toISOString(),
+                    });
+    
+                    console.log("Grade created:", response.data);
+                }
             }
         } catch (error) {
             console.error("Error submitting grade:", error);
         }
     };
+    
 
     const fetchGradesForStudents = async (studentsList, assignmentsList) => {
         const updatedStudents = await Promise.all(
@@ -175,18 +241,18 @@ const ListOfStudentsComponent = () => {
 
     const fetchTableData = async (id) => {
         setLoading(true);
-
+    
         try {
             const enrollmentRes = await request("GET", `/api/enrollment/all/${id}`);
             const studentList = enrollmentRes.data.map((enrollment) => enrollment.student);
-
+    
             const assignmentRes = await request("GET", `/api/assignment/all/${id}`);
             const assignmentList = assignmentRes.data;
-
+    
             setAssignments(assignmentList);
-
+    
             await fetchGradesForStudents(studentList, assignmentList);
-
+    
         } catch (error) {
             console.error("Eroare:", error);
         } finally {
@@ -210,7 +276,7 @@ const ListOfStudentsComponent = () => {
                 </div>
             )
         },
-        ...assignments.map((assignment) => ({
+        ...(Array.isArray(assignments) && assignments.length > 0 ? assignments.map((assignment) => ({
             name: (
                 <div style={{ textAlign: "center" }}>
                     <strong>{assignment.assignmentName}</strong>
@@ -226,12 +292,13 @@ const ListOfStudentsComponent = () => {
                     onBlur={(e) =>
                         handleGradeSubmit(row.studentId, assignment.assignmentId, e.target.value)
                     }
-                    style={{ width: '60px' }}
+                    style={{ width: '75px' }}
                 />
             ),
             ignoreRowClick: true,
-        })),
+        })) : []),
     ];
+    
 
     return (
         <div className="data-table">
