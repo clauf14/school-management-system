@@ -1,11 +1,7 @@
 package com.unitbv.school_management_system.services;
 
-import com.unitbv.school_management_system.entities.Course;
-import com.unitbv.school_management_system.entities.Enrollment;
-import com.unitbv.school_management_system.entities.Student;
-import com.unitbv.school_management_system.repositories.CourseRepository;
-import com.unitbv.school_management_system.repositories.EnrollmentRepository;
-import com.unitbv.school_management_system.repositories.StudentRepository;
+import com.unitbv.school_management_system.entities.*;
+import com.unitbv.school_management_system.repositories.*;
 import com.unitbv.school_management_system.request.EnrollmentRequest;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +17,20 @@ public class EnrollmentService {
 
     private final StudentRepository studentRepository;
 
+    private final GradeHistoryRepository gradeHistoryRepository;
+
+    private final GradeRepository gradeRepository;
+
     public EnrollmentService(EnrollmentRepository enrollmentRepository,
                              CourseRepository courseRepository,
-                             StudentRepository studentRepository) {
+                             StudentRepository studentRepository,
+                             GradeHistoryRepository gradeHistoryRepository,
+                             GradeRepository gradeRepository) {
         this.enrollmentRepository = enrollmentRepository;
         this.courseRepository = courseRepository;
         this.studentRepository = studentRepository;
+        this.gradeHistoryRepository = gradeHistoryRepository;
+        this.gradeRepository = gradeRepository;
     }
 
     public Enrollment createEnrollment(EnrollmentRequest request) {
@@ -76,6 +80,33 @@ public class EnrollmentService {
         if (!enrollmentRepository.existsById(enrollmentId)) {
             throw new IllegalStateException(String.format("Enrollment with ID %s doesn't exist", enrollmentId));
         }
+
+        Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() -> new IllegalStateException("Enrollment not found"));
+
+        Integer studentId = enrollment.getStudent().getStudentId();
+
+        deleteGradeHistories(studentId);
+
+        deleteGrades(studentId);
+
         enrollmentRepository.deleteById(enrollmentId);
     }
+
+    public void deleteGradeHistories(Integer studentId) {
+        List<GradeHistory> gradeHistories = gradeHistoryRepository.findByGrade_StudentId(studentId);
+
+        if (!gradeHistories.isEmpty()) {
+            gradeHistoryRepository.deleteAll(gradeHistories);
+        }
+    }
+
+    public void deleteGrades(Integer studentId) {
+        List<Grade> grades = gradeRepository.findByStudentId(studentId);
+
+        if (!grades.isEmpty()) {
+            gradeRepository.deleteAll(grades);
+        }
+    }
+
 }

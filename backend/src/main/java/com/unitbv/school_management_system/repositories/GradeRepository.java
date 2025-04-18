@@ -8,4 +8,5 @@ import java.util.List;
 public interface GradeRepository extends JpaRepository<Grade, Integer> {
     Grade findGradeByAssignmentIdAndStudentId(Integer assignmentId, Integer studentId);
 
+    List<Grade> findByStudentId(Integer studentId);
 }

@@ -12,4 +12,5 @@ public interface GradeHistoryRepository extends JpaRepository<GradeHistory, Inte
 
     List<GradeHistory> findByGrade_AssignmentIdAndGrade_StudentId(Integer assignmentId, Integer studentId);
 
+    List<GradeHistory> findByGrade_StudentId(Integer studentId);
 }
