@@ -9,6 +9,7 @@ import  java.util.List;
 
 
 public interface GradeHistoryRepository extends JpaRepository<GradeHistory, Integer> {
-    List<GradeHistory> findGradeHistoriesByCourseIdAndStudentId(Integer courseId, Integer studentId);
+
+    List<GradeHistory> findByGrade_AssignmentIdAndGrade_StudentId(Integer assignmentId, Integer studentId);
 
 }

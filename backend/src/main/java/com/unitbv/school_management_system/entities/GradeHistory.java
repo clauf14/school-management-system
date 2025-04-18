@@ -16,23 +16,15 @@ public class GradeHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer historyId;
 
-    @Column(name = "grade_id", nullable = false)
-    private Integer gradeId;
-
-    @Column(name = "student_id", nullable = false)
-    private Integer studentId;
-
-    @Column(name = "course_id", nullable = false)
-    private Integer courseId;
+    @ManyToOne
+    @JoinColumn(name = "grade_id", nullable = false)
+    private Grade grade;
 
     @Column(nullable = false)
     private Double oldScore;
 
     @Column(nullable = false)
     private Double newScore;
-
-    @Column(name = "changed_by", nullable = false)
-    private Integer changedBy;
 
     @Column(nullable = false)
     private java.sql.Timestamp changedAt;
