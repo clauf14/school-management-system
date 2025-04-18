@@ -36,6 +36,11 @@ public class EnrollmentService {
         Student student = studentRepository.findById(request.getStudentId())
                 .orElseThrow(() -> new RuntimeException("This student doesn't exist"));
 
+        boolean isAlreadyEnrolled = enrollmentRepository.existsByStudentAndCourse(student, course);
+        if (isAlreadyEnrolled) {
+            throw new RuntimeException("This student is already enrolled in the course.");
+        }
+
         Enrollment enrollment = new Enrollment();
         enrollment.setCourse(course);
         enrollment.setStudent(student);
