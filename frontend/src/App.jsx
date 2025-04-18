@@ -10,7 +10,7 @@ import Navbar from './layout/Navbar';
 import ProtectedRoute from './service/ProtectedRoute';
 import { useLocation } from "react-router";
 import { AuthProvider } from "./service/AuthContext.jsx";
-import ListOfStudentsComponent from './ListOfStudents/ListOfStudentsComponent.jsx';
+import TeacherEnrollments from './teacherEnrollments/TeacherEnrollments.jsx';
 
 function App() {
 
@@ -23,7 +23,7 @@ function App() {
           <Route path='/register' element={<SignUpComponent />} />
 
           <Route path='/courses/:id' element={<ProtectedRoute><ListOfCoursesComponent /></ProtectedRoute>} />
-          <Route path='/list-students/:id' element={<ProtectedRoute><ListOfStudentsComponent /></ProtectedRoute>} />
+          <Route path='/list-students/:id' element={<ProtectedRoute><TeacherEnrollments /></ProtectedRoute>} />
 
           <Route path='/enrollments/:id' element={<ProtectedRoute><EnrolledCourses /></ProtectedRoute>} />
 

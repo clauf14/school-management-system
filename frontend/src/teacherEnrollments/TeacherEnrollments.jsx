@@ -1,11 +1,12 @@
 import DataTable from "react-data-table-component";
-
+import "./dialog.css"
+import "./column.css"
 
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { request, getAuthenticationToken } from "../axios_helper";
 
-const ListOfStudentsComponent = () => {
+const TeacherEnrollments = () => {
 
     // course id
     const { id } = useParams();
@@ -13,15 +14,17 @@ const ListOfStudentsComponent = () => {
     const [students, setStudents] = useState([]);
     const [studentEmail, setStudentEmail] = useState('');
 
+    const [assignment, setAssignment] = useState('');
     const [assignments, setAssignments] = useState([]);
     const [assignmentName, setAssignmentName] = useState('');
     const [assignmentMaxScore, setAssignmentMaxScore] = useState('');
 
-    const [grade, setGrade] = useState('');
-    const [oldGrade, setOldGrade] = useState(null);
+
+    const [gradeHistories, setGradeHistories] = useState([]);
 
     const [isAddStudentDialogOpen, setIsAddStudentDialogOpen] = useState(false);
     const [isAddAssignmentDialogOpen, setIsAddAssignmentDialogOpen] = useState(false);
+    const [isSeeGradeHistoryOpen, setIsSeeGradeHistoryOpen] = useState(false);
 
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
@@ -41,12 +44,6 @@ const ListOfStudentsComponent = () => {
         }
     }, [students]);
 
-    useEffect(() => {
-        if (grade) {
-            console.log(students);
-        }
-    }, [students]);
-
     const formatDate = (date) => {
         const formattedDate = new Date(date);
         const options = {
@@ -60,6 +57,16 @@ const ListOfStudentsComponent = () => {
         return new Intl.DateTimeFormat('en-US', options).format(formattedDate);
     }
 
+    const handleSeeGradeHistories = async (assignmentId, studentId) => {
+        try {
+            const response = await request("GET", `/api/grade-history/${assignmentId}/${studentId}`);
+            setGradeHistories(response.data);
+            setIsSeeGradeHistoryOpen(true);
+        } catch (error) {
+            console.error("Error fetching grade history:", error);
+        }
+    };
+
     const handleAddStudent = () => {
         setIsAddStudentDialogOpen(true);
     };
@@ -71,6 +78,8 @@ const ListOfStudentsComponent = () => {
     const handleCloseDialogs = () => {
         setIsAddStudentDialogOpen(false);
         setIsAddAssignmentDialogOpen(false);
+        setIsSeeGradeHistoryOpen(false);
+
         setStudentEmail('');
         setAssignmentName('');
         setAssignmentMaxScore('');
@@ -102,68 +111,96 @@ const ListOfStudentsComponent = () => {
         try {
             const response = await request("PUT", `/api/grade/${gradeId}`, {
                 score: newScore,
-                updatedAt: new Date().toISOString(), 
+                updatedAt: new Date().toISOString(),
             });
-    
-            setStudents(prevStudents => 
-                prevStudents.map(student => 
-                    student.grades[gradeId] 
-                        ? { 
-                            ...student, 
-                            grades: { 
-                                ...student.grades, 
-                                [gradeId]: response.data 
+
+            setStudents(prevStudents =>
+                prevStudents.map(student =>
+                    student.grades[gradeId]
+                        ? {
+                            ...student,
+                            grades: {
+                                ...student.grades,
+                                [gradeId]: response.data
                             }
-                        } 
+                        }
                         : student
                 )
             );
-    
+
             console.log("Assignments updated:", response.data);
         } catch (error) {
             console.error("Error updating grade:", error);
         }
     };
 
-    const addToHistoryGrade = async(gradeId, oldScore, newScore) => {
+    const addToHistoryGrade = async (gradeId, oldScore, newScore) => {
         try {
             const response = await request("POST", `/api/grade-history`, {
                 gradeId: gradeId,
                 oldScore: oldScore,
                 newScore: newScore,
-                changedAt: new Date().toISOString(), 
+                changedAt: new Date().toISOString(),
             });
-    
+
             console.log("Grade history:", response.data);
         } catch (error) {
             console.error("Error updating grade:", error);
         }
     }
-    
+
+    const deleteEnrollment = async (enrollmentId) => {
+        try {
+            const response = await request("DELETE", `/api/enrollment/${enrollmentId}`)
+
+            fetchTableData(id);
+            console.log("Grade history:", response);
+        } catch (error) {
+            console.error("Error updating grade:", error);
+        }
+    }
+
+    const getAssignment = async (assignmentId) => {
+        try {
+            const response = await request("GET", `/api/assignment/${assignmentId}`)
+
+            console.log("getAssignment:", response.data.maxScore);
+
+            return response.data.maxScore;
+        } catch (error) {
+            console.error("Error updating grade:", error);
+        }
+    }
 
     const handleGradeSubmit = async (studentId, assignmentId, score) => {
         try {
             if (score !== '' && score !== null) {
                 const parsedScore = parseFloat(score);
-    
+
+                const maxScore = await getAssignment(assignmentId);
+                if (parsedScore < 1 || parsedScore > maxScore) {
+                    alert("The grade must be between 1 and " + maxScore);
+                    return;
+                }
+
                 const existingGrade = students.find(student => student.studentId === studentId)?.grades?.[assignmentId];
-    
+
                 if (existingGrade) {
-                    await updateGrade(existingGrade.gradeId, parsedScore);  
+                    await updateGrade(existingGrade.gradeId, parsedScore);
 
                     await addToHistoryGrade(existingGrade.gradeId, existingGrade.score, parsedScore)
 
                     existingGrade.score = parsedScore;
                 } else {
                     console.log("Creating new grade for student:", studentId, "and assignment:", assignmentId);
-    
+
                     const response = await request("POST", '/api/grade', {
                         studentId: studentId,
                         assignmentId: assignmentId,
                         score: parsedScore,
                         gradedAt: new Date().toISOString(),
                     });
-    
+
                     console.log("Grade created:", response.data);
                 }
             }
@@ -171,7 +208,7 @@ const ListOfStudentsComponent = () => {
             console.error("Error submitting grade:", error);
         }
     };
-    
+
 
     const fetchGradesForStudents = async (studentsList, assignmentsList) => {
         const updatedStudents = await Promise.all(
@@ -241,18 +278,18 @@ const ListOfStudentsComponent = () => {
 
     const fetchTableData = async (id) => {
         setLoading(true);
-    
+
         try {
             const enrollmentRes = await request("GET", `/api/enrollment/all/${id}`);
             const studentList = enrollmentRes.data.map((enrollment) => enrollment.student);
-    
+
             const assignmentRes = await request("GET", `/api/assignment/all/${id}`);
             const assignmentList = assignmentRes.data;
-    
+
             setAssignments(assignmentList);
-    
+
             await fetchGradesForStudents(studentList, assignmentList);
-    
+
         } catch (error) {
             console.error("Eroare:", error);
         } finally {
@@ -262,52 +299,84 @@ const ListOfStudentsComponent = () => {
 
     const columns = [
         {
-            name: "ID",
-            selector: (row) => row.studentId,
-        },
-        {
             name: "Student name",
             selector: (row) => `${row.firstName} ${row.lastName}\n${formatDate(row.createdAt)}`,
             cell: (row) => (
-                <div style={{ textAlign: "center" }}>
-                    <div><strong>{row.firstName} {row.lastName}</strong></div>
-                    <div style={{ fontSize: "12px", color: "#888" }}>{"Added: " + formatDate(row.createdAt)}</div>
-                    <div style={{ fontSize: "12px", color: "#888" }}>{"Updated: " + formatDate(row.updatedAt)}</div>
+                <div className="student-cell">
+                    <div className="student-name"><strong>{row.firstName} {row.lastName}</strong></div>
+                    <div className="student-date">{"Added: " + formatDate(row.createdAt)}</div>
+                    <div className="student-date">{"Updated: " + formatDate(row.updatedAt)}</div>
                 </div>
             )
         },
-        ...(Array.isArray(assignments) && assignments.length > 0 ? assignments.map((assignment) => ({
-            name: (
-                <div style={{ textAlign: "center" }}>
-                    <strong>{assignment.assignmentName}</strong>
-                    <div style={{ fontSize: "12px", color: "#888" }}>🎯 {assignment.maxScore}</div>
-                </div>
-            ),
+        ...(Array.isArray(assignments) && assignments.length > 0
+            ? assignments.map((assignment) => ({
+                name: (
+                    <div className="assignment-header">
+                        <strong>{assignment.assignmentName}</strong>
+                        <div className="assignment-max-score">🎯 {assignment.maxScore}</div>
+                    </div>
+                ),
+                cell: (row) => (
+                    <div className="grade-cell">
+                        <input
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            max={assignment.maxScore}
+                            defaultValue={row.grades?.[assignment.assignmentId]?.score || ''}
+                            placeholder="-"
+                            onInput={(e) => {
+                                const value = e.target.value;
+                                if (!/^\d*\.?\d{0,2}$/.test(value)) {
+                                    e.target.value = value.slice(0, -1);
+                                }
+                            }}
+                            onBlur={(e) =>
+                                handleGradeSubmit(row.studentId, assignment.assignmentId, e.target.value)
+                            }
+                            className="grade-input"
+                        />
+                        <button
+                            className="history-button"
+                            title="View grade history"
+                            onClick={() => handleSeeGradeHistories(assignment.assignmentId, row.studentId)}
+                        >
+                            🕓
+                        </button>
+                    </div>
+                ),
+                ignoreRowClick: true,
+            })) : []),
+        {
+            name: "Remove student",
+            selector: (row) => `${row.firstName} ${row.lastName}\n${formatDate(row.createdAt)}`,
             cell: (row) => (
-                <input
-                    type="number"
-                    min="0"
-                    max={assignment.maxScore}
-                    defaultValue={row.grades?.[assignment.assignmentId]?.score || ''}
-                    onBlur={(e) =>
-                        handleGradeSubmit(row.studentId, assignment.assignmentId, e.target.value)
-                    }
-                    style={{ width: '75px' }}
-                />
-            ),
-            ignoreRowClick: true,
-        })) : []),
+                <button
+                    className="remove-button"
+                    onClick={() => deleteEnrollment(row.studentId)}
+                    title="Remove student"
+                >
+                    ❌
+                </button>
+            )
+        },
     ];
-    
+
+    const previousPage = () => {
+        navigate(-1);
+    }
 
     return (
         <div className="data-table">
             <div className="container">
+
                 <div className="data-table-wrapper">
                     <div className="header">
                         <h2>List of students</h2>
                         <button onClick={handleAddStudent}>Add students</button>
                         <button onClick={handleAddAssignment}>Add assignment</button>
+                        <button onClick={previousPage}>Back</button>
                     </div>
 
                     <DataTable
@@ -374,9 +443,43 @@ const ListOfStudentsComponent = () => {
                     </form>
                 </dialog>
 
+                {/* Dialog pentru afișarea istoricului notelor */}
+                <dialog open={isSeeGradeHistoryOpen} className="dialog-container">
+                    <div>
+                        <h3 className="dialog-title">Grade History</h3>
+
+                        {gradeHistories.length > 0 ? (
+                            <div className="grade-history-list">
+                                {gradeHistories.map((history, index) => (
+                                    <div key={index} className="grade-history-item">
+                                        <div>
+                                            <strong className="grade-history-scores">{history.oldScore} → {history.newScore}</strong>
+                                            <div className="grade-history-date">
+                                                {formatDate(history.changedAt)}
+                                            </div>
+                                        </div>
+                                        <div className="grade-history-index">#{index + 1}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p style={{ textAlign: "center", color: "#888" }}>No history available for this grade.</p>
+                        )}
+
+                        <div className="close-button-container">
+                            <button
+                                onClick={() => setIsSeeGradeHistoryOpen(false)}
+                                className="close-button"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </dialog>
+
             </div>
         </div>
     );
 }
 
-export default ListOfStudentsComponent;
+export default TeacherEnrollments;
