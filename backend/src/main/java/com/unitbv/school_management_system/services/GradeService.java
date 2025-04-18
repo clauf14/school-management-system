@@ -3,7 +3,6 @@ package com.unitbv.school_management_system.services;
 import com.unitbv.school_management_system.entities.Grade;
 import com.unitbv.school_management_system.repositories.GradeRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -33,7 +32,6 @@ public class GradeService {
         Grade gradeToUpdate = gradeRepository.findById(gradeId).orElseThrow(() -> new IllegalStateException(String.format("Grade with ID %s doesn't exist", gradeId)));
 
         gradeToUpdate.setStudentId(grade.getStudentId());
-        gradeToUpdate.setCourseId(grade.getCourseId());
         gradeToUpdate.setAssignmentId(grade.getAssignmentId());
         gradeToUpdate.setScore(grade.getScore());
         gradeToUpdate.setGradedAt(grade.getGradedAt());
@@ -51,8 +49,8 @@ public class GradeService {
         gradeRepository.deleteById(gradeId);
     }
 
-    public List<Grade> getAllGradesByCourseAndStudent(Integer courseId, Integer studentId) {
-        return gradeRepository.findGradesByCourseIdAndStudentId(courseId, studentId);
+    public Grade getGradeByAssignmentAndStudent(Integer assignmentId, Integer studentId) {
+        return gradeRepository.findGradeByAssignmentIdAndStudentId(assignmentId, studentId);
     }
 
 

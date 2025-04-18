@@ -42,18 +42,9 @@ public class GradeController {
         gradeService.deleteGrade(gradeId);
     }
 
-    @GetMapping("/course/{courseId}/student/{studentId}")
-    public List<Grade> getGradesByCourseAndStudent(@PathVariable Integer courseId, @PathVariable Integer studentId) {
-        return gradeService.getAllGradesByCourseAndStudent(courseId, studentId);
-    }
-
-    @PostMapping("/course/{courseId}/student/{studentId}")
-    public Grade createGrade(@PathVariable Integer courseId, @PathVariable Integer studentId, @RequestBody Grade grade) {
-
-        grade.setStudentId(studentId);
-        grade.setCourseId(courseId);
-
-        return gradeService.createGrade(grade);
+    @GetMapping("/{assignmentId}/{studentId}")
+    public Grade getGradeByAssignmentAndStudent(@PathVariable Integer assignmentId, @PathVariable Integer studentId) {
+        return gradeService.getGradeByAssignmentAndStudent(assignmentId, studentId);
     }
 
 

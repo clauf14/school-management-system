@@ -26,9 +26,9 @@ public class AssignmentController {
         return assignmentService.getAssignment(assignmentId);
     }
 
-    @GetMapping
-    public List<Assignment> getAssignments() {
-        return assignmentService.getAllAssignments();
+    @GetMapping("/all/{courseId}")
+    public List<Assignment> getAssignments(@PathVariable Integer courseId) {
+        return assignmentService.getAllAssignments(courseId);
     }
 
     @PutMapping("/{assignmentId}")
