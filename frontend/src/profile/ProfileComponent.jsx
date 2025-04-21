@@ -40,7 +40,7 @@ const ProfileComponent = () => {
 
     return (
         <div className="profile-container">
-            <h2 className="profile-heading">User Profile</h2>
+            <h2 className="profile-heading">Profile</h2>
             {student && (
                 <div className="profile-card">
                     <div className="profile-item"><span>Id:</span> {student.studentId}</div>
