@@ -7,26 +7,6 @@ import { useAuth } from "../service/AuthContext.jsx";
 const ProfileComponent = () => {
     const auth = useAuth();
 
-    //const userInfo = localStorage.getItem("loginInfo");
-    /*
-    const [student, setStudent] = useState({
-        studentId: null,
-        userId: null,
-        firstName: "",
-        lastName: "",
-        createdAt: null,
-        updatedAt: null
-    });
-    const [teacher, setTeacher] = useState({
-        teacherId: null,
-        userId: null,
-        firstName: "",
-        lastName: "",
-        createdAt: null,
-        updatedAt: null
-    });
-
-     */
     const [student, setStudent] = useState(null);
     const [teacher, setTeacher] = useState(null);
 
@@ -59,21 +39,24 @@ const ProfileComponent = () => {
     };
 
     return (
-        <div>
+        <div className="profile-container">
+            <h2 className="profile-heading">User Profile</h2>
             {student && (
-                <div>
-                    <label>Id: {student.studentId}</label>
-                    <label>First name: {student.firstName}</label>
-                    <label>Last name: {student.lastName}</label>
-                    <label>Added on {new Date(student.createdAt).toDateString()}</label>
+                <div className="profile-card">
+                    <div className="profile-item"><span>Id:</span> {student.studentId}</div>
+                    <div className="profile-item"><span>First Name:</span> {student.firstName}</div>
+                    <div className="profile-item"><span>Last Name:</span> {student.lastName}</div>
+                    <div className="profile-item"><span>Added on:</span> {new Date(student.createdAt).toDateString()}</div>
+                    <div className="profile-item"><span>Role:</span> STUDENT</div>
                 </div>
             )}
             {teacher && (
-                <div>
-                    <label>Id: {teacher.studentId}</label>
-                    <label>First name: {teacher.firstName}</label>
-                    <label>Last name: {teacher.lastName}</label>
-                    <label>Added on {new Date(teacher.createdAt).toDateString()}</label>
+                <div className="profile-card">
+                    <div className="profile-item"><span>Id:</span> {teacher.teacherId}</div>
+                    <div className="profile-item"><span>First Name:</span> {teacher.firstName}</div>
+                    <div className="profile-item"><span>Last Name:</span> {teacher.lastName}</div>
+                    <div className="profile-item"><span>Added on:</span> {new Date(teacher.createdAt).toDateString()}</div>
+                    <div className="profile-item"><span>Role:</span> TEACHER</div>
                 </div>
             )}
         </div>

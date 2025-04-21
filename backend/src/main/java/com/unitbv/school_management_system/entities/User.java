@@ -17,27 +17,27 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // auto-generates the primary key
     @Column(name = "user_id")
-    private Integer userId;
+    public Integer userId;
 
     @Column(unique = true, nullable = false)
-    private String email;
+    public String email;
 
     @Column(unique = true, nullable = false)
-    private String username;
+    public String username;
 
     @Column(nullable = false)
-    private String passwordHash;
+    public String passwordHash;
 
     @Column(length = 2000)
-    private String token;
+    public String token;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    public Role role;
 
     @Column(nullable = false, updatable = false)
-    private java.sql.Timestamp createdAt;
+    public java.sql.Timestamp createdAt;
 
-    private java.sql.Timestamp updatedAt;
+    public java.sql.Timestamp updatedAt;
 
     public enum Role {
         TEACHER, STUDENT
