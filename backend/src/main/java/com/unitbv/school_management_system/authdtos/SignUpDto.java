@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SignUpDto {
 
-    private String username;
-    private String email;
-    private Role role;
-    private String token;
-    private java.sql.Timestamp createdAt;
-    private char[] password;
+    public String username;
+    public String email;
+    public Role role;
+    public String token;
+    public java.sql.Timestamp createdAt;
+    public char[] password;
 
     public enum Role {
         TEACHER, STUDENT

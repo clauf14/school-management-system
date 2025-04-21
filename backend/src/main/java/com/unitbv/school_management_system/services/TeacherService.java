@@ -15,12 +15,14 @@ public class TeacherService {
         this.teacherRepository = teacherRepository;
     }
 
-    public Teacher createTeacher(Teacher teacher) {
+    public Teacher createTeacher(Teacher teacher, Integer userId) {
+        teacher.setUserId(userId);
+
         return teacherRepository.save(teacher);
     }
 
     public Teacher getTeacher(Integer teacherId) {
-        return teacherRepository.findById(teacherId).orElseThrow(() -> new IllegalArgumentException(String.format("Teacher with ID %s doesn't exist", teacherId)));
+        return teacherRepository.findTeacherByUserId(teacherId);
     }
 
     public List<Teacher> getAllTeachers() {

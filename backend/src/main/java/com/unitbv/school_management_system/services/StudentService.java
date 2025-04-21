@@ -21,12 +21,14 @@ public class StudentService {
         this.userRepository = userRepository;
     }
 
-    public Student createStudent(Student student) {
+    public Student createStudent(Student student, Integer userId) {
+        student.setUserId(userId);
+
         return studentRepository.save(student);
     }
 
     public Student getStudent(Integer studentId) {
-        return studentRepository.findById(studentId).orElseThrow(() -> new IllegalArgumentException(String.format("Student with ID %s doesn't exist", studentId)));
+        return studentRepository.findStudentByUserId(studentId);
     }
 
     public Student getStudentByEmail(String email) {

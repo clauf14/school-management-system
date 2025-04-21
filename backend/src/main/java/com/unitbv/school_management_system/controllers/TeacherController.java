@@ -17,9 +17,9 @@ public class TeacherController {
         this.teacherService = teacherService;
     }
 
-    @PostMapping
-    public Teacher addTeacher(@RequestBody Teacher teacher) {
-        return teacherService.createTeacher(teacher);
+    @PostMapping("/{userId}")
+    public Teacher addTeacher(@RequestBody Teacher teacher, @PathVariable Integer userId) {
+        return teacherService.createTeacher(teacher, userId);
     }
 
     @GetMapping("/{teacherId}")
