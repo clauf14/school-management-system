@@ -57,7 +57,7 @@ public class EnrollmentService {
         return enrollmentRepository.findById(enrollmentId).orElseThrow(() -> new IllegalArgumentException(String.format("Enrollment with ID %s doesn't exist", enrollmentId)));
     }
 
-    public List<Enrollment> getEnrollmetns(Integer courseId) {
+    public List<Enrollment> getEnrollments(Integer courseId) {
         return enrollmentRepository.findAllByCourse_CourseId(courseId);
     }
 
@@ -107,6 +107,10 @@ public class EnrollmentService {
         if (!grades.isEmpty()) {
             gradeRepository.deleteAll(grades);
         }
+    }
+
+    public List<Enrollment> getStudentEnrollments(Integer studentId) {
+        return enrollmentRepository.findByStudent_StudentId(studentId);
     }
 
 }

@@ -261,6 +261,9 @@ const TeacherEnrollments = () => {
 
         const studentId = await getStudent(studentEmail);
 
+        console.log(studentId)
+        console.log(id)
+
         try {
             const response = await request('POST', 'api/enrollment', {
                 studentId: studentId,
