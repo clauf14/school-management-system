@@ -5,6 +5,7 @@ import com.unitbv.school_management_system.services.TeacherService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/teacher")
@@ -20,6 +21,11 @@ public class TeacherController {
     @PostMapping("/{userId}")
     public Teacher addTeacher(@RequestBody Teacher teacher, @PathVariable Integer userId) {
         return teacherService.createTeacher(teacher, userId);
+    }
+
+    @GetMapping("/by-id/{teacherId}")
+    public Teacher findTeacher(@PathVariable Integer teacherId) {
+        return teacherService.findTeacher(teacherId);
     }
 
     @GetMapping("/{teacherId}")
