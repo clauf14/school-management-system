@@ -33,16 +33,13 @@ const EnrolledCourses = () => {
     const fetchTableData = async (id) => {
         setLoading(true);
 
-        const studentId = id;
-
         try {
-            const response = await request("GET", `http://localhost:8080/api/enrollment/all/${studentId}`);
+            const student = await request("GET", `http://localhost:8080/api/student/${id}`);
+            const studentId = student.data.studentId;
+            const response = await request("GET", `http://localhost:8080/api/enrollment/student/${studentId}`);
 
-            if (response.status === 200) {
-                setCourses(response.data);
-            } else {
-                console.error('Error:', response.status);
-            }
+            setCourses(response.data);
+            console.log(response.data);
         } catch (err) {
             console.error("Eroare:", err);
         } finally {
@@ -65,11 +62,11 @@ const EnrolledCourses = () => {
     const columns = [
         {
             name: "ID",
-            selector: (row) => row.courseId,
+            selector: (row) => row.course.courseId,
         },
         {
             name: "Name",
-            selector: (row) => row.courseName,
+            selector: (row) => row.course.courseName,
         },
         {
             name: "CreatedAt",
@@ -80,10 +77,10 @@ const EnrolledCourses = () => {
             selector: (row) => formatDate(row.updatedAt),
         },
         {
-            name: "See course",
+            name: "See grades",
             cell: (row) => (
-                <button onClick={() => handleUserProfile(row.courseId)}>
-                    See Course
+                <button onClick={() => handleUserProfile(row.course.courseId)}>
+                    See Grades
                 </button>
             ),
         },

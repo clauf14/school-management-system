@@ -11,6 +11,7 @@ import ProtectedRoute from './service/ProtectedRoute';
 import { useLocation } from "react-router";
 import { AuthProvider } from "./service/AuthContext.jsx";
 import TeacherEnrollments from './teacherEnrollments/TeacherEnrollments.jsx';
+import StudentGrades from "./studentGrades/StudentGrades.jsx";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
           <Route path='/list-students/:id' element={<ProtectedRoute><TeacherEnrollments /></ProtectedRoute>} />
 
           <Route path='/enrollments/:id' element={<ProtectedRoute><EnrolledCourses /></ProtectedRoute>} />
+          <Route path='/enrollments/:id/:courseId' element={<ProtectedRoute><StudentGrades /></ProtectedRoute>} />
 
           <Route path='/profile' element={<ProtectedRoute><ProfileComponent /></ProtectedRoute>} />
         </Routes>

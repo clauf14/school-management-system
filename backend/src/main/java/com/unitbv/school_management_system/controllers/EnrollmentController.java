@@ -30,7 +30,12 @@ public class EnrollmentController {
 
     @GetMapping("/all/{courseId}")
     public List<Enrollment> getStudentsFromEnrollment(@PathVariable Integer courseId) {
-        return enrollmentService.getEnrollmetns(courseId);
+        return enrollmentService.getEnrollments(courseId);
+    }
+
+    @GetMapping("/student/{studentId}")
+    public List<Enrollment> getEnrollmentsforStudent(@PathVariable Integer studentId) {
+        return enrollmentService.getStudentEnrollments(studentId);
     }
 
     @GetMapping
