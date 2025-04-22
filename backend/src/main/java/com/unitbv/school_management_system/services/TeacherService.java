@@ -5,6 +5,7 @@ import com.unitbv.school_management_system.repositories.TeacherRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeacherService {
@@ -23,6 +24,10 @@ public class TeacherService {
 
     public Teacher getTeacher(Integer teacherId) {
         return teacherRepository.findTeacherByUserId(teacherId);
+    }
+
+    public Teacher findTeacher(Integer teacherId) {
+        return teacherRepository.findByTeacherId(teacherId);
     }
 
     public List<Teacher> getAllTeachers() {
